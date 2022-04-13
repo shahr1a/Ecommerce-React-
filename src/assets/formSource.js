@@ -8,6 +8,7 @@ import PersonIcon from "@mui/icons-material/Person"
 import EmailIcon from "@mui/icons-material/Email"
 import BadgeIcon from "@mui/icons-material/Badge"
 
+
 export const userInputs = [
   {
     id: 1,
@@ -93,6 +94,7 @@ export const loginInputs = [
     placeholder: "Email",
     label: "Email",
     icon: <MailLockIcon className="icon-form" />,
+    errorMessage: "Email is invalid",
   },
   {
     id: 2,
@@ -101,6 +103,7 @@ export const loginInputs = [
     placeholder: "Password",
     label: "Password",
     icon: <LockIcon className="icon-form" />,
+    errorMessage: "Password did not match",
   },
 ]
 
@@ -112,6 +115,8 @@ export const registrationInputs = [
     placeholder: "Username",
     label: "Username",
     icon: <PersonIcon className="icon-form" />,
+    errorMessage: "Only letter and number allowed",
+    pattern: "^[A-Za-z0-9]{3,}$",
   },
   {
     id: 2,
@@ -120,6 +125,7 @@ export const registrationInputs = [
     placeholder: "Email",
     label: "Email",
     icon: <EmailIcon className="icon-form" />,
+    errorMessage: "Invalid email format",
   },
   {
     id: 3,
@@ -128,6 +134,9 @@ export const registrationInputs = [
     placeholder: "Full Name",
     label: "Full Name",
     icon: <BadgeIcon className="icon-form" />,
+    errorMessage: "Only alphabetic letters allowed",
+    pattern: `^[a-zA-Z0-9]{3,}$`,
+    
   },
   {
     id: 4,
@@ -136,6 +145,8 @@ export const registrationInputs = [
     placeholder: "Password",
     label: "Password",
     icon: <LockIcon className="icon-form" />,
+    errorMessage: "At least 6 character and letter, number and special character",
+    pattern: `^[a-zA-Z0-9!@#$%^&*]{6,25}$`,
   },
   {
     id: 5,
@@ -144,6 +155,7 @@ export const registrationInputs = [
     placeholder: "Confirm Password",
     label: "Confirm Password",
     icon: <LockIcon className="icon-form" />,
+    errorMessage: "Password did not match",
   },
 ]
 

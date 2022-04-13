@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import "./authentication.scss"
 import FormInput from "../../components/form-input/FormInput"
 import logo from "../../assets/svg/logo.svg"
@@ -12,6 +12,7 @@ import {
 import { Link } from "react-router-dom"
 
 const Authentication = () => {
+
   const [values_register, setValues_register] = useState({
     username: "",
     email: "",
@@ -20,13 +21,90 @@ const Authentication = () => {
     cpassword: "",
   })
 
+  const [value_errors_register, setValue_errors_register] = useState({})
+  const [isSubmitRegister, setIsSubmitRegister] = useState(false)
+  const [value_errors_signin, setValue_errors_signin] = useState({})
+  const [isSubmitSingin, setIsSubmitSingin] = useState(false)
+
   const [values_signin, setValues_signin] = useState({
     email: "",
     password: "",
   })
 
-  const handleSubmit = (e) => {
+  const handleSubmitSignin = (e) => {
     e.preventDefault()
+    setValue_errors_signin(validateSignin(values_signin))
+    setIsSubmitSingin(true)
+  }
+
+  useEffect(() => {
+    if(Object.keys(value_errors_signin).length === 0 && isSubmitSingin) {
+      console.log(values_signin)
+    }
+  }, [value_errors_signin, isSubmitSingin])
+
+  const handleSubmitRegister = (e) => {
+    e.preventDefault()
+    setValue_errors_register(validate(values_register))
+    setIsSubmitRegister(true)
+  }
+
+  useEffect(() => {
+    if(Object.keys(value_errors_register).length === 0 && isSubmitRegister) {
+      console.log(values_register)
+    }
+  }, [value_errors_register, isSubmitRegister])
+
+  const validateSignin = (values) => {
+    const errors = {}
+    if(!values.email) {
+      errors.email = "Email is required!"
+    } 
+
+    if(!values.password) {
+      errors.password = "Password is required!"
+    }
+
+    return errors
+  }
+
+  const validate = (values) => {
+    const errors = {}
+    const regexEmail = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+    const regexUsername = /^[a-zA-Z0-9]+$/;
+    const regexName = /^[a-zA-Z ]+$/;
+
+    if(!values.username) {
+      errors.username = "Username is required!"
+    } else if(!regexUsername.test(values.username)) {
+      errors.username = "Username can only contain letter and number!"
+    }
+
+    if(!values.email) {
+      errors.email = "Email is required!"
+    } else if(!regexEmail.test(values.email)) {
+      errors.email = "This is not a valid email format!"
+    }
+
+    if(!values.fullname) {
+      errors.fullname = "Full Name is required!"
+    } else if(!regexName.test(values.fullname)) {
+      errors.fullname = "Name cannot not contain number or special character"
+    }
+
+    if(!values.password) {
+      errors.password = "Password is required!"
+    } else if(values.password < 4) {
+      errors.password = "Password must be at least 4 characters long!"
+    }
+
+    if(!values.cpassword) {
+      errors.cpassword = "Cannot be empty!"
+    } else if(values.password !== values.cpassword) {
+      errors.cpassword = "Passwords did not match!"
+    } 
+
+    return errors
   }
 
   const onChangeSignin = (e) => {
@@ -40,6 +118,11 @@ const Authentication = () => {
     setValues_register({
       ...values_register,
       [e.target.name]: e.target.value,
+    })
+
+    setValue_errors_register({
+      ...value_errors_register,
+      [e.target.name] : ""
     })
   }
 
@@ -57,25 +140,23 @@ const Authentication = () => {
     })
   }
 
-  console.log(values_signin)
-  console.log(values_register)
-
   return (
     <div className="authentication">
       <div className="authentication-container">
         <div className="authentication-form">
           <div className="signin-signup">
-            <form action="" className="sign-in-form">
+            <form onSubmit={handleSubmitSignin} className="sign-in-form">
               <h2 className="title">Sign in</h2>
               {loginInputs.map((input) => (
-                <div className="input-field">
+                <>
                   <FormInput
                     key={input.id}
                     {...input}
                     value={values_signin[input.name]}
                     onChange={onChangeSignin}
                   />
-                </div>
+                  <span className="error">{value_errors_signin[input.name]}</span>
+                </>                
               ))}
               <button type="submit" className="btn solid">
                 Login
@@ -95,17 +176,19 @@ const Authentication = () => {
               </div>
             </form>
 
-            <form action="" className="sign-up-form">
+            <form onSubmit={handleSubmitRegister} className="sign-up-form">
               <h2 className="title">Register</h2>
               {registrationInputs.map((input) => (
-                <div className="input-field">
+                <>
                   <FormInput
                     key={input.id}
                     {...input}
                     value={values_register[input.name]}
                     onChange={onChangeRegister}
                   />
-                </div>
+                  <span className="error">{value_errors_register[input.name]}</span>
+                </>
+                
               ))}
               <button type="submit" className="btn solid">
                 Register
