@@ -18,8 +18,16 @@ import SettingsSystemDaydreamOutlinedIcon from "@mui/icons-material/SettingsSyst
 import PsychologyOutlinedIcon from "@mui/icons-material/PsychologyOutlined"
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined"
 import { Link } from "react-router-dom"
+import LoginAction from "../../redux/actions/authAction"
+import { useDispatch } from "react-redux"
 
 const Sidebar = () => {
+  const dispatch = useDispatch()
+
+  const logout = () => {
+    dispatch(LoginAction.logout())
+  }
+
   return (
     <div className="sidebar">
       <div className="top">
@@ -44,37 +52,77 @@ const Sidebar = () => {
               <span>Users</span>
             </li>
           </Link>
+          <Link to="/brands" style={{ textDecoration: "none" }}>
+            <li>
+              <AndroidOutlinedIcon className="icon" />
+              <span>Brands</span>
+            </li>
+          </Link>
+          <Link to="/sliders" style={{ textDecoration: "none" }}>
+            <li>
+              <LinearScaleOutlinedIcon className="icon" />
+              <span>Sliders</span>
+            </li>
+          </Link>
+          <Link to="/categories" style={{ textDecoration: "none" }}>
+            <li>
+              <CategoryOutlinedIcon className="icon" />
+              <span>Category</span>
+            </li>
+          </Link>
+          <Link to="/subcategories" style={{ textDecoration: "none" }}>
+            <li>
+              <CategoryOutlinedIcon className="icon" />
+              <span>Sub Category</span>
+            </li>
+          </Link>
+          <Link to="/subsubcategories" style={{ textDecoration: "none" }}>
+            <li>
+              <CategoryOutlinedIcon className="icon" />
+              <span>Sub Sub Category</span>
+            </li>
+          </Link>
 
-          <li>
-            <AndroidOutlinedIcon className="icon" />
-            <span>Brands</span>
-          </li>
-          <li>
-            <LinearScaleOutlinedIcon className="icon" />
-            <span>Sliders</span>
-          </li>
-          <li>
-            <CategoryOutlinedIcon className="icon" />
-            <span>Category</span>
-          </li>
-          <li>
-            <CommentBankOutlinedIcon className="icon" />
-            <span>Coupon</span>
-          </li>
+          <Link to="/coupons" style={{ textDecoration: "none" }}>
+            <li>
+              <CommentBankOutlinedIcon className="icon" />
+              <span>Coupon</span>
+            </li>
+          </Link>
+
+          <Link to="/orders" style={{ textDecoration: "none" }}>
+            <li>
+              <CreditCardIcon className="icon" />
+              <span>Orders</span>
+            </li>
+          </Link>
+
           <Link to="/products" style={{ textDecoration: "none" }}>
             <li>
               <StoreIcon className="icon" />
               <span>Products</span>
             </li>
           </Link>
-          <li>
-            <CreditCardIcon className="icon" />
-            <span>Orders</span>
-          </li>
-          <li>
-            <LocalShippingIcon className="icon" />
-            <span>Delivery</span>
-          </li>
+
+          <Link to="/shipping" style={{ textDecoration: "none" }}>
+            <li>
+              <LocalShippingIcon className="icon" />
+              <span>Shipping Division</span>
+            </li>
+          </Link>
+          <Link to="/shipping/district" style={{ textDecoration: "none" }}>
+            <li>
+              <LocalShippingIcon className="icon" />
+              <span>Shipping District</span>
+            </li>
+          </Link>
+          <Link to="/shipping/state" style={{ textDecoration: "none" }}>
+            <li>
+              <LocalShippingIcon className="icon" />
+              <span>Shipping State</span>
+            </li>
+          </Link>
+
           <p className="title">USEFUL</p>
           <li>
             <InsertChartIcon className="icon" />
@@ -104,7 +152,7 @@ const Sidebar = () => {
           </li>
           <li>
             <ExitToAppIcon className="icon" />
-            <span>Logout</span>
+            <span onClick={logout}>Logout</span>
           </li>
         </ul>
       </div>

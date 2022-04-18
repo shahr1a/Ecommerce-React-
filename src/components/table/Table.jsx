@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import "./table.scss"
 import Table from "@mui/material/Table"
 import TableBody from "@mui/material/TableBody"
@@ -9,8 +9,52 @@ import TableRow from "@mui/material/TableRow"
 import Paper from "@mui/material/Paper"
 
 import order_list from "../../assets/JsonData/order_list.json"
+import { useDispatch, useSelector } from "react-redux"
+
+import OrderAction from "../../redux/actions/orderAction"
+import {
+  ORDER_FAILED,
+  ORDER_SUCCESS,
+} from "../../redux/constants/orderConstants"
+import { createAPIEndpoint, ENDPOINTS } from "../../api"
 
 const List = () => {
+  const [orderlist, setOrderlist] = useState([])
+  const dispatch = useDispatch()
+  const orderReducer = useSelector((state) => state.Order)
+
+  useEffect(() => {
+    async function retireveOrder() {
+      createAPIEndpoint(ENDPOINTS.ORDER)
+        .fetchAll()
+        .then((response) => {
+          dispatch({
+            type: ORDER_SUCCESS,
+            payload: response.data,
+          })
+          console.log(response.data)
+          setOrderlist(response.data)
+        })
+        .catch((error) => {
+          console.log(error)
+          if (error.response.status === 200) {
+            dispatch({
+              type: ORDER_FAILED,
+              payload: error.response.data,
+            })
+          } else if (error.response.status === 401) {
+            dispatch({
+              type: ORDER_FAILED,
+              payload:
+                "Login failed! Please check email and password properly ...",
+            })
+          }
+        })
+    }
+
+    retireveOrder()
+  }, [setOrderlist, dispatch])
+
   return (
     <div className="table">
       <TableContainer component={Paper}>
@@ -18,13 +62,10 @@ const List = () => {
           <TableHead>
             <TableRow>
               <TableCell className="tableCell" style={{ fontWeight: "bold" }}>
-                Tracking ID
+                Invoice ID
               </TableCell>
               <TableCell className="tableCell" style={{ fontWeight: "bold" }}>
-                Product
-              </TableCell>
-              <TableCell className="tableCell" style={{ fontWeight: "bold" }}>
-                Customer
+                Customer Name
               </TableCell>
               <TableCell className="tableCell" style={{ fontWeight: "bold" }}>
                 Date
@@ -41,19 +82,13 @@ const List = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {order_list.map((row) => (
-              <TableRow key={row.id}>
-                <TableCell className="tableCell">{row.id}</TableCell>
-                <TableCell className="tableCell">
-                  <div className="cellWrapper">
-                    <img src={row.img} alt="" className="image" />
-                    {row.product}
-                  </div>
-                </TableCell>
-                <TableCell className="tableCell">{row.customer}</TableCell>
-                <TableCell className="tableCell">{row.date}</TableCell>
+            {orderlist.map((row, index) => (
+              <TableRow key={index}>
+                <TableCell className="tableCell">{row.invoice_no}</TableCell>
+                <TableCell className="tableCell">{row.name}</TableCell>
+                <TableCell className="tableCell">{row.order_date}</TableCell>
                 <TableCell className="tableCell">{row.amount}</TableCell>
-                <TableCell className="tableCell">{row.method}</TableCell>
+                <TableCell className="tableCell">{row.payment_type}</TableCell>
                 <TableCell className="tableCell">
                   <span className={`status ${row.status}`}>{row.status}</span>
                 </TableCell>

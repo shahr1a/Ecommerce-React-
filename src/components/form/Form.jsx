@@ -1,10 +1,52 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import "./form.scss"
 
-import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined"
+import InputLabel from "@mui/material/InputLabel"
+import MenuItem from "@mui/material/MenuItem"
+import FormControl from "@mui/material/FormControl"
+import Select from "@mui/material/Select"
+import TextField from "@mui/material/TextField"
 
-const Form = ({ inputs, title }) => {
+import FormHandler from "../../handler/formHandler"
+
+import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined"
+import { Navigate, useNavigate } from "react-router-dom"
+import { useSelector } from "react-redux"
+
+const Form = ({ inputs, title, type }) => {
   const [file, setFile] = useState("")
+  const [values, setValues] = useState({})
+  const [response, setResponse] = useState({})
+  const navigate = useNavigate()
+  const [trigger, setTrigger] = useState(false)
+  const brandReducer = useSelector((state) => state.Brand)
+  const categoryReducer = useSelector((state) => state.Category)
+  const subcategoryReducer = useSelector((state) => state.Subcategory)
+  const subsubcategoryReducer = useSelector((state) => state.Subsubcategory)
+
+  const onChange = (e) => {
+    setValues({
+      ...values,
+      [e.target.name]: e.target.value,
+    })
+  }
+
+  console.log(brandReducer.brand)
+
+  const formSubmit = (e) => {
+    e.preventDefault()
+
+    setResponse(FormHandler(values, type))
+    setTrigger(true)
+  }
+
+  useEffect(() => {
+    console.log(response)
+    if (trigger) {
+      setTrigger(false)
+      navigate(`/${type}`)
+    }
+  }, [response])
 
   return (
     <div className="form">
@@ -23,7 +65,7 @@ const Form = ({ inputs, title }) => {
           />
         </div>
         <div className="right">
-          <form>
+          <form onSubmit={formSubmit}>
             <div className="formInput">
               <label htmlFor="file">
                 Image: <DriveFolderUploadOutlinedIcon className="icon" />
@@ -37,13 +79,13 @@ const Form = ({ inputs, title }) => {
               />
             </div>
             {inputs.map((input) => (
-              <div className="formInput" key={input.id}>
+              <div className="formInput" key={input._id}>
                 <label>{input.label}</label>
                 <input
                   type={input.type}
-                  name=""
-                  id=""
+                  name={input.name}
                   placeholder={input.placeholder}
+                  onChange={onChange}
                 />
               </div>
             ))}
