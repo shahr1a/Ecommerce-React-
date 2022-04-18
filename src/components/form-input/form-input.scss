@@ -1,5 +1,4 @@
 .formInput {
-
   position: relative;
 
   .input-field {
@@ -14,7 +13,6 @@
     align-items: center;
     padding: 0 0.4rem;
 
-    
     input {
       background: none;
       outline: none;
@@ -31,17 +29,6 @@
     }
   }
 
-  // .error {
-  //   position: absolute;
-  //   width: 500px;
-  //   font-size: 16px;
-  //   color: red;
-  //   display: none;
-  //   margin-left: 4rem;
-  //   margin-bottom: 4rem;
-  //   top: 63px;
-  // }
-
   .icon-form {
     align-items: center;
     justify-content: center;
@@ -57,11 +44,6 @@
   .input-field {
     input:invalid[focused="true"] ~ .error {
       display: block;
-    }    
+    }
   }
 }
-
-
-
-
-
